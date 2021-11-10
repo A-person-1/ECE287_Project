@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 --
---   FileName:         lcd_example.vhd
+--   FileName:         lcd_user_logic.vhd
 --   Dependencies:     none
 --   Design Software:  Quartus II 32-bit Version 11.1 Build 173 SJ Full Version
 --
