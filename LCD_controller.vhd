@@ -51,8 +51,8 @@ USE ieee.std_logic_1164.ALL;
 ENTITY lcd_controller IS
   PORT(
     clk        : IN    STD_LOGIC;  --system clock
-    reset_n    : IN    STD_LOGIC;  --active low reinitializes lcd
-    lcd_enable : IN    STD_LOGIC;  --latches data into lcd controller
+    reset_n    : IN    STD_LOGIC := '1';  --active low reinitializes lcd
+    lcd_enable : IN    STD_LOGIC := '1';  --latches data into lcd controller
     lcd_bus    : IN    STD_LOGIC_VECTOR(9 DOWNTO 0);  --data and control signals
     busy       : OUT   STD_LOGIC := '1';  --lcd controller busy/idle feedback
     rw, rs, e  : OUT   STD_LOGIC;  --read/write, setup/data, and enable for lcd
@@ -187,3 +187,4 @@ BEGIN
     END IF;
   END PROCESS;
 END controller;
+
