@@ -64,15 +64,15 @@ BEGIN
           char := char + 1;
         END IF;
         CASE char IS
-          WHEN 1 => lcd_bus <= "1000110001";
-          WHEN 2 => lcd_bus <= "1000110010";
-          WHEN 3 => lcd_bus <= "1000110011";
-          WHEN 4 => lcd_bus <= "1000110100";
-          WHEN 5 => lcd_bus <= "1000110101";
-          WHEN 6 => lcd_bus <= "1000110110";
-          WHEN 7 => lcd_bus <= "1000110111";
-          WHEN 8 => lcd_bus <= "1000111000";
-          WHEN 9 => lcd_bus <= "1000111001";
+          WHEN 1 => lcd_bus <= "1001000001";
+          WHEN 2 => lcd_bus <= "1001000010";
+          WHEN 3 => lcd_bus <= "1001000011";
+          WHEN 4 => lcd_bus <= "1001000100";
+          WHEN 5 => lcd_bus <= "1001000101";
+          WHEN 6 => lcd_bus <= "1001000110";
+          WHEN 7 => lcd_bus <= "1001000111";
+          WHEN 8 => lcd_bus <= "1001001000";
+          WHEN 9 => lcd_bus <= "1001001001";
           WHEN OTHERS => lcd_enable <= '0';
         END CASE;
       ELSE
@@ -82,3 +82,4 @@ BEGIN
   END PROCESS;
   
 END behavior;
+
