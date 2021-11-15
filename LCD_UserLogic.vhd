@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 --
---   FileName:         lcd_user_logic.vhd
+--   FileName:         lcd_example.vhd
 --   Dependencies:     none
 --   Design Software:  Quartus II 32-bit Version 11.1 Build 173 SJ Full Version
 --
@@ -18,13 +18,15 @@
 --   Version 1.0 6/13/2012 Scott Larson
 --     Initial Public Release
 --
---   Prints "123456789" on a HD44780 compatible 8-bit interface character LCD 
+--   Prints "HELLO WORLD" on a HD44780 compatible 8-bit interface character LCD 
 --   module using the lcd_controller.vhd component.
 --
 --------------------------------------------------------------------------------
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
+USE ieee.std_logic_arith.all;
+USE ieee.std_logic_unsigned.all;
 
 ENTITY lcd IS
   PORT(
@@ -49,35 +51,89 @@ ARCHITECTURE behavior OF lcd IS
   END COMPONENT;
 BEGIN
 
-  --instantiate the lcd controller
+  --instantiate the lcd controller for first line
   dut: lcd_controller
     PORT MAP(clk => clk, reset_n => '1', lcd_enable => lcd_enable, lcd_bus => lcd_bus, 
              busy => lcd_busy, rw => rw, rs => rs, e => e, lcd_data => lcd_data);
   
   PROCESS(clk)
-    VARIABLE char  :  INTEGER RANGE 0 TO 10 := 0;
+    VARIABLE char  :  INTEGER RANGE 0 TO 57:= 0;
+	 
   BEGIN
     IF(clk'EVENT AND clk = '1') THEN
       IF(lcd_busy = '0' AND lcd_enable = '0') THEN
         lcd_enable <= '1';
-        IF(char < 10) THEN
+        IF(char < 57) THEN
           char := char + 1;
         END IF;
         CASE char IS
-          WHEN 1 => lcd_bus <= "1001000001";
-          WHEN 2 => lcd_bus <= "1001000010";
-          WHEN 3 => lcd_bus <= "1001000011";
-          WHEN 4 => lcd_bus <= "1001000100";
-          WHEN 5 => lcd_bus <= "1001000101";
-          WHEN 6 => lcd_bus <= "1001000110";
-          WHEN 7 => lcd_bus <= "1001000111";
-          WHEN 8 => lcd_bus <= "1001001000";
-          WHEN 9 => lcd_bus <= "1001001001";
+          WHEN 1 => lcd_bus <= "1001001000"; --H
+          WHEN 2 => lcd_bus <= "1001000101"; --E
+          WHEN 3 => lcd_bus <= "1001001100";	--L
+          WHEN 4 => lcd_bus <= "1001001100"; --L
+          WHEN 5 => lcd_bus <= "1001001111";	--O
+          WHEN 6 => lcd_bus <= "1000100000";	-- space
+          WHEN 7 => lcd_bus <= "1001010111";	--W
+          WHEN 8 => lcd_bus <= "1001001111";	--O
+          WHEN 9 => lcd_bus <= "1001010010";	--R
+			 WHEN 10 => lcd_bus <= "1001001100";	--L
+			 WHEN 11 => lcd_bus <= "1001000100";	--D
+			 WHEN 12 => lcd_bus <= "1000100000";
+			 WHEN 13 => lcd_bus <= "1000100000";
+			 WHEN 14 => lcd_bus <= "1000100000";
+			 WHEN 15 => lcd_bus <= "1000100000";
+			 WHEN 16 => lcd_bus <= "1000100000";
+			 --move to next line/set the DDRam address to 0x40
+			 When 17 => lcd_bus <= "1000100000";
+			 When 18 => lcd_bus <= "1000100000";
+			 When 19 => lcd_bus <= "1000100000";
+			 When 20 => lcd_bus <= "1000100000";
+			 When 21 => lcd_bus <= "1000100000";
+			 When 22 => lcd_bus <= "1000100000";
+			 When 23 => lcd_bus <= "1000100000";
+			 When 24 => lcd_bus <= "1000100000";
+			 When 25 => lcd_bus <= "1000100000";
+			 When 26 => lcd_bus <= "1000100000";
+			 When 27 => lcd_bus <= "1000100000";
+			 When 28 => lcd_bus <= "1000100000";
+			 When 29 => lcd_bus <= "1000100000";
+			 When 30 => lcd_bus <= "1000100000";
+			 When 31 => lcd_bus <= "1000100000";
+			 When 32 => lcd_bus <= "1000100000";
+			 When 33 => lcd_bus <= "1000100000";
+			 When 34 => lcd_bus <= "1000100000";
+			 When 35 => lcd_bus <= "1000100000";
+			 When 36 => lcd_bus <= "1000100000";
+			 When 37 => lcd_bus <= "1000100000";
+			 When 38 => lcd_bus <= "1000100000";
+			 When 39 => lcd_bus <= "1000100000";
+			 when 40 => lcd_bus <= "1000100000";
+			 
+			 --message on second line
+			 WHEN 41 => lcd_bus <= "1001001000"; --H
+          WHEN 42 => lcd_bus <= "1001000101"; --E
+          WHEN 43 => lcd_bus <= "1001001100";	--L
+          WHEN 44 => lcd_bus <= "1001001100"; --L
+          WHEN 45 => lcd_bus <= "1001001111";	--O
+          WHEN 46 => lcd_bus <= "1000100000";	-- space
+          WHEN 47 => lcd_bus <= "1001010111";	--W
+          WHEN 48 => lcd_bus <= "1001001111";	--O
+          WHEN 49 => lcd_bus <= "1001010010";	--R
+			 WHEN 50 => lcd_bus <= "1001001100";	--L
+			 WHEN 51 => lcd_bus <= "1001000100";	--D
+			 WHEN 52 => lcd_bus <= "1000100000";
+			 WHEN 53 => lcd_bus <= "1000100000";
+			 WHEN 54 => lcd_bus <= "1000100000";
+			 WHEN 55 => lcd_bus <= "1000100000";
+			 WHEN 56 => lcd_bus <= "1000100000";
           WHEN OTHERS => lcd_enable <= '0';
+         
         END CASE;
+		  
       ELSE
         lcd_enable <= '0';
       END IF;
+		
     END IF;
   END PROCESS;
   
