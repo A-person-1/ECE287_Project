@@ -76,41 +76,42 @@ BEGIN
           WHEN 7 => lcd_bus <= "1001010111";	--W
           WHEN 8 => lcd_bus <= "1001001111";	--O
           WHEN 9 => lcd_bus <= "1001010010";	--R
-			 WHEN 10 => lcd_bus <= "1001001100";	--L
-			 WHEN 11 => lcd_bus <= "1001000100";	--D
-			 WHEN 12 => lcd_bus <= "1000100000";
-			 WHEN 13 => lcd_bus <= "1000100000";
-			 WHEN 14 => lcd_bus <= "1000100000";
-			 WHEN 15 => lcd_bus <= "1000100000";
-			 WHEN 16 => lcd_bus <= "1000100000";
-			 --move to next line/set the DDRam address to 0x40
-			 When 17 => lcd_bus <= "1000100000";
-			 When 18 => lcd_bus <= "1000100000";
-			 When 19 => lcd_bus <= "1000100000";
-			 When 20 => lcd_bus <= "1000100000";
-			 When 21 => lcd_bus <= "1000100000";
-			 When 22 => lcd_bus <= "1000100000";
-			 When 23 => lcd_bus <= "1000100000";
-			 When 24 => lcd_bus <= "1000100000";
-			 When 25 => lcd_bus <= "1000100000";
-			 When 26 => lcd_bus <= "1000100000";
-			 When 27 => lcd_bus <= "1000100000";
-			 When 28 => lcd_bus <= "1000100000";
-			 When 29 => lcd_bus <= "1000100000";
-			 When 30 => lcd_bus <= "1000100000";
-			 When 31 => lcd_bus <= "1000100000";
-			 When 32 => lcd_bus <= "1000100000";
-			 When 33 => lcd_bus <= "1000100000";
-			 When 34 => lcd_bus <= "1000100000";
-			 When 35 => lcd_bus <= "1000100000";
-			 When 36 => lcd_bus <= "1000100000";
-			 When 37 => lcd_bus <= "1000100000";
-			 When 38 => lcd_bus <= "1000100000";
-			 When 39 => lcd_bus <= "1000100000";
-			 when 40 => lcd_bus <= "1000100000";
+	 WHEN 10 => lcd_bus <= "1001001100";	--L
+	 WHEN 11 => lcd_bus <= "1001000100";	--D
+	 WHEN 12 => lcd_bus <= "1000100000";
+	 WHEN 13 => lcd_bus <= "1000100000";
+	 WHEN 14 => lcd_bus <= "1000100000";
+	 WHEN 15 => lcd_bus <= "1000100000";
+	 WHEN 16 => lcd_bus <= "1000100000";
+	 
+	--move to next line/set the DDRam address to 0x40
+	 When 17 => lcd_bus <= "1000100000";
+	 When 18 => lcd_bus <= "1000100000";
+	 When 19 => lcd_bus <= "1000100000";
+	 When 20 => lcd_bus <= "1000100000";
+	 When 21 => lcd_bus <= "1000100000";
+	 When 22 => lcd_bus <= "1000100000";
+	 When 23 => lcd_bus <= "1000100000";
+	 When 24 => lcd_bus <= "1000100000";
+	 When 25 => lcd_bus <= "1000100000";
+	 When 26 => lcd_bus <= "1000100000";
+	 When 27 => lcd_bus <= "1000100000";
+	 When 28 => lcd_bus <= "1000100000";
+	 When 29 => lcd_bus <= "1000100000";
+	 When 30 => lcd_bus <= "1000100000";
+	 When 31 => lcd_bus <= "1000100000";
+	 When 32 => lcd_bus <= "1000100000";
+	 When 33 => lcd_bus <= "1000100000";
+	 When 34 => lcd_bus <= "1000100000";
+	 When 35 => lcd_bus <= "1000100000";
+	 When 36 => lcd_bus <= "1000100000";
+	 When 37 => lcd_bus <= "1000100000";
+	 When 38 => lcd_bus <= "1000100000";
+	 When 39 => lcd_bus <= "1000100000";
+	 when 40 => lcd_bus <= "1000100000";
 			 
-			 --message on second line
-			 WHEN 41 => lcd_bus <= "1001001000"; --H
+	 --message on second line
+	 WHEN 41 => lcd_bus <= "1001001000"; --H
           WHEN 42 => lcd_bus <= "1001000101"; --E
           WHEN 43 => lcd_bus <= "1001001100";	--L
           WHEN 44 => lcd_bus <= "1001001100"; --L
@@ -119,13 +120,13 @@ BEGIN
           WHEN 47 => lcd_bus <= "1001010111";	--W
           WHEN 48 => lcd_bus <= "1001001111";	--O
           WHEN 49 => lcd_bus <= "1001010010";	--R
-			 WHEN 50 => lcd_bus <= "1001001100";	--L
-			 WHEN 51 => lcd_bus <= "1001000100";	--D
-			 WHEN 52 => lcd_bus <= "1000100000";
-			 WHEN 53 => lcd_bus <= "1000100000";
-			 WHEN 54 => lcd_bus <= "1000100000";
-			 WHEN 55 => lcd_bus <= "1000100000";
-			 WHEN 56 => lcd_bus <= "1000100000";
+	 WHEN 50 => lcd_bus <= "1001001100";	--L
+	 WHEN 51 => lcd_bus <= "1001000100";	--D
+	 WHEN 52 => lcd_bus <= "1000100000";
+	 WHEN 53 => lcd_bus <= "1000100000";
+	 WHEN 54 => lcd_bus <= "1000100000";
+	 WHEN 55 => lcd_bus <= "1000100000";
+	 WHEN 56 => lcd_bus <= "1000100000";
           WHEN OTHERS => lcd_enable <= '0';
          
         END CASE;
