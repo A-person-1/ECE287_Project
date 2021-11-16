@@ -1,0 +1,177 @@
+--------------------------------------------------------------------------------
+--
+--   FileName:         lcd_example.vhd
+--   Dependencies:     none
+--   Design Software:  Quartus II 32-bit Version 11.1 Build 173 SJ Full Version
+--
+--   HDL CODE IS PROVIDED "AS IS."  DIGI-KEY EXPRESSLY DISCLAIMS ANY
+--   WARRANTY OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
+--   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+--   PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL DIGI-KEY
+--   BE LIABLE FOR ANY INCIDENTAL, SPECIAL, INDIRECT OR CONSEQUENTIAL
+--   DAMAGES, LOST PROFITS OR LOST DATA, HARM TO YOUR EQUIPMENT, COST OF
+--   PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY OR SERVICES, ANY CLAIMS
+--   BY THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF),
+--   ANY CLAIMS FOR INDEMNITY OR CONTRIBUTION, OR OTHER SIMILAR COSTS.
+--
+--   Version History
+--   Version 1.0 6/13/2012 Scott Larson
+--     Initial Public Release
+--
+--   Prints "HELLO WORLD" on a HD44780 compatible 8-bit interface character LCD 
+--   module using the lcd_controller.vhd component.
+--
+--------------------------------------------------------------------------------
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+USE ieee.std_logic_arith.all;
+USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
+
+ENTITY lcd IS
+  PORT(
+      clk       : IN  STD_LOGIC;  --system clock
+      rw, rs, e : OUT STD_LOGIC;  --read/write, setup/data, and enable for lcd
+      lcd_data  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --data signals for lcd
+	   keyval    : IN  STD_LOGIC_VECTOR(5 DOWNTO 0));
+END lcd;
+
+ARCHITECTURE behavior OF lcd IS
+  SIGNAL   lcd_enable : STD_LOGIC;
+  SIGNAL   lcd_bus    : STD_LOGIC_VECTOR(9 DOWNTO 0);
+  SIGNAL   lcd_busy   : STD_LOGIC;
+  SIGNAL   key        : INTEGER := 2;
+
+  COMPONENT lcd_controller IS
+    PORT(
+       clk        : IN  STD_LOGIC; --system clock
+       reset_n    : IN  STD_LOGIC; --active low reinitializes lcd
+       lcd_enable : IN  STD_LOGIC; --latches data into lcd controller
+       lcd_bus    : IN  STD_LOGIC_VECTOR(9 DOWNTO 0); --data and control signals
+       busy       : OUT STD_LOGIC; --lcd controller busy/idle feedback
+       rw, rs, e  : OUT STD_LOGIC; --read/write, setup/data, and enable for lcd
+		 --keyval     : IN  STD_LOGIC_VECTOR(5 DOWNTO 0);
+       lcd_data   : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)); --data signals for lcd
+  END COMPONENT;
+BEGIN
+  --key <= to_integer(unsigned(keyval));
+  --instantiate the lcd controller for first line
+  dut: lcd_controller
+    PORT MAP(clk => clk, reset_n => '1', lcd_enable => lcd_enable, lcd_bus => lcd_bus, 
+             busy => lcd_busy, rw => rw, rs => rs, e => e, lcd_data => lcd_data);
+  
+  PROCESS(clk)
+    VARIABLE char   :  INTEGER RANGE 0 TO 57:= 0;
+	 VARIABLE letter1:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter2:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter3:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter4:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter5:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter6:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter7:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter8:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter9:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter10:  STD_LOGIC_VECTOR(9 downto 0);
+	 VARIABLE letter11:  STD_LOGIC_VECTOR(9 downto 0);
+  BEGIN
+    IF(clk'EVENT AND clk = '1') THEN
+      IF(lcd_busy = '0' AND lcd_enable = '0') THEN
+        lcd_enable <= '1';
+        IF(char < 57) THEN
+          char := char + 1;
+        END IF;
+		  letter1 := "1001001000";
+		  letter2 := "1001000101";
+		  letter3 := "1001001100";
+		  letter4 := "1001001100";
+		  letter5 := "1001001111";
+		  letter6 := "1000100000";
+		  letter7 := "1001010111";
+		  letter8 := "1001001111";
+		  letter9 := "1001010010";
+		  letter10 := "1001001100";
+		  letter11 := "1001000100";
+        CASE char IS
+          WHEN 1 => lcd_bus <= letter1; --H
+          WHEN 2 => lcd_bus <= letter2; --E
+          WHEN 3 => lcd_bus <= letter3;	--L
+          WHEN 4 => lcd_bus <= letter4; --L
+          WHEN 5 => lcd_bus <= letter5;	--O
+          WHEN 6 => lcd_bus <= letter6;	-- space
+          WHEN 7 => lcd_bus <= letter7;	--W
+          WHEN 8 => lcd_bus <= letter8;	--O
+          WHEN 9 => lcd_bus <= letter9;	--R
+	 WHEN 10 => lcd_bus <= letter10;	--L
+	 WHEN 11 => lcd_bus <= letter11;	--D
+	 WHEN 12 => lcd_bus <= "1000100000";
+	 WHEN 13 => lcd_bus <= "1000100000";
+	 WHEN 14 => lcd_bus <= "1000100000";
+	 WHEN 15 => lcd_bus <= "1000100000";
+	 WHEN 16 => lcd_bus <= "1000100000";
+	 
+	--move to next line/set the DDRam address to 0x40
+	 When 17 => lcd_bus <= "1000100000";
+	 When 18 => lcd_bus <= "1000100000";
+	 When 19 => lcd_bus <= "1000100000";
+	 When 20 => lcd_bus <= "1000100000";
+	 When 21 => lcd_bus <= "1000100000";
+	 When 22 => lcd_bus <= "1000100000";
+	 When 23 => lcd_bus <= "1000100000";
+	 When 24 => lcd_bus <= "1000100000";
+	 When 25 => lcd_bus <= "1000100000";
+	 When 26 => lcd_bus <= "1000100000";
+	 When 27 => lcd_bus <= "1000100000";
+	 When 28 => lcd_bus <= "1000100000";
+	 When 29 => lcd_bus <= "1000100000";
+	 When 30 => lcd_bus <= "1000100000";
+	 When 31 => lcd_bus <= "1000100000";
+	 When 32 => lcd_bus <= "1000100000";
+	 When 33 => lcd_bus <= "1000100000";
+	 When 34 => lcd_bus <= "1000100000";
+	 When 35 => lcd_bus <= "1000100000";
+	 When 36 => lcd_bus <= "1000100000";
+	 When 37 => lcd_bus <= "1000100000";
+	 When 38 => lcd_bus <= "1000100000";
+	 When 39 => lcd_bus <= "1000100000";
+	 when 40 => lcd_bus <= "1000100000";
+			 letter1 := letter1 + key;
+			 letter2 := letter2 + key;
+			 letter3 := letter3 + key;
+			 letter4 := letter4 + key;
+			 letter5 := letter5 + key;
+			 letter6 := letter6 + key;
+			 letter7 := letter7 + key;
+			 letter8 := letter8 + key;
+			 letter9 := letter9 + key;
+			 letter10:= letter10+ key;
+			 letter11:= letter11+ key;
+	 --message on second line
+	 WHEN 41 => lcd_bus <= letter1; --H
+          WHEN 42 => lcd_bus <= letter2; --E
+          WHEN 43 => lcd_bus <= letter3;	--L
+          WHEN 44 => lcd_bus <= letter4; --L
+          WHEN 45 => lcd_bus <= letter5;	--O
+          WHEN 46 => lcd_bus <= letter6;	-- space
+          WHEN 47 => lcd_bus <= letter7;	--W
+          WHEN 48 => lcd_bus <= letter8;	--O
+          WHEN 49 => lcd_bus <= letter9;	--R
+	 WHEN 50 => lcd_bus <= letter10;	--L
+	 WHEN 51 => lcd_bus <= letter11;	--D
+	 WHEN 52 => lcd_bus <= "1000100000";
+	 WHEN 53 => lcd_bus <= "1000100000";
+	 WHEN 54 => lcd_bus <= "1000100000";
+	 WHEN 55 => lcd_bus <= "1000100000";
+	 WHEN 56 => lcd_bus <= "1000100000";
+          WHEN OTHERS => lcd_enable <= '0';
+         
+        END CASE;
+		  
+      ELSE
+        lcd_enable <= '0';
+      END IF;
+		
+    END IF;
+  END PROCESS;
+  
+END behavior;
