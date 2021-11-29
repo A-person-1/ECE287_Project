@@ -326,7 +326,7 @@ BEGIN
 		  end if;
 		
 		--Decrypter("CHOICE" = 0)
-		else
+		elsif choice = '0' then
 			if letter1a - key < "1001000001" then
 				extra := letter1a - key + "1001000001";
 				letter1b := "1001011011" - extra;
