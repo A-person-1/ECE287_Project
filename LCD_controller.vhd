@@ -47,6 +47,8 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
+USE ieee.std_logic_arith.all;
+USE ieee.std_logic_unsigned.all;
 
 ENTITY lcd_controller IS
   PORT(
@@ -187,4 +189,5 @@ BEGIN
     END IF;
   END PROCESS;
 END controller;
+
 
