@@ -29,6 +29,7 @@ USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
 USE ieee.numeric_std.all;
 
+--code from Scott Larson, all rights reserved.
 ENTITY lcd IS
   PORT(
       clk       : IN  STD_LOGIC;  --system clock
@@ -58,7 +59,7 @@ BEGIN
   dut: lcd_controller
     PORT MAP(clk => clk, reset_n => '1', lcd_enable => lcd_enable, lcd_bus => lcd_bus, 
              busy => lcd_busy, rw => rw, rs => rs, e => e, lcd_data => lcd_data);
-  
+  -- Alecea Grosjean and Anders Burck, all rights reserved.
   PROCESS(clk)
     VARIABLE char   :  INTEGER RANGE 0 TO 57:= 0;
 	 VARIABLE extra : STD_LOGIC_VECTOR(9 downto 0);
@@ -114,7 +115,7 @@ BEGIN
 	 VARIABLE letter14c :STD_LOGIC_VECTOR(9 downto 0);
 	 VARIABLE letter15c :STD_LOGIC_VECTOR(9 downto 0);
 	 VARIABLE letter16c :STD_LOGIC_VECTOR(9 downto 0);
-	 
+	 --Scott Larson: Copyright.
   BEGIN
     IF(clk'EVENT AND clk = '1') THEN
       IF(lcd_busy = '0' AND lcd_enable = '0') THEN
@@ -123,7 +124,7 @@ BEGIN
           char := char + 1;
         END IF;
 		  
-		  
+		  --Grosjean/Burck: Copyright
 		  letter1a := "1001001000"; --H
 		  letter2a := "1001000101"; --E
 		  letter3a := "1001001100"; --L
@@ -486,6 +487,8 @@ BEGIN
 		  
 		  
 		  IF(decrypt = '0') THEN 
+		  --inspiration taken from BehindtheCode - Youtube
+		  --help from Intel.com DE2-115 User Manual
 			  CASE char IS
 				 WHEN 1 => lcd_bus <= letter1a; --H
 				 WHEN 2 => lcd_bus <= letter2a; --E
@@ -613,6 +616,7 @@ BEGIN
 				 WHEN 56 => lcd_bus <= letter16c;
 				 WHEN OTHERS => lcd_enable <= '0';
 				 END CASE;
+				 --Scott Larson
 		END If;
 	
 		
