@@ -34,7 +34,15 @@ ENTITY lcd IS
       clk       : IN  STD_LOGIC;  --system clock
       rw, rs, e : OUT STD_LOGIC;  --read/write, setup/data, and enable for lcd
       lcd_data  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --data signals for lcd
-	   key    : IN  STD_LOGIC_VECTOR(4 DOWNTO 0));
+	   key       : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
+		--register ports
+		d 			 : IN  STD_LOGIC_VECTOR(9 DOWNTO 0); -- input.
+		ld 		 : IN  STD_LOGIC; -- load/enable.
+		clr 		 : IN  STD_LOGIC; -- async. clear.
+		clk2 		 : IN  STD_LOGIC; -- clock.
+		q 			 : OUT STD_LOGIC_VECTOR(9 DOWNTO 0); -- output.
+		--decryption/encryption selection
+		choice    : IN  STD_LOGIC);
 END lcd;
 
 ARCHITECTURE behavior OF lcd IS
@@ -52,12 +60,30 @@ ARCHITECTURE behavior OF lcd IS
        rw, rs, e  : OUT STD_LOGIC; --read/write, setup/data, and enable for lcd
        lcd_data   : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)); --data signals for lcd
   END COMPONENT;
+  
+  COMPONENT regis IS
+	PORT(
+		d 			 : IN  STD_LOGIC_VECTOR(9 DOWNTO 0); -- input.
+		ld 		 : IN  STD_LOGIC; -- load/enable.
+		clr 		 : IN  STD_LOGIC; -- async. clear.
+		clk2 		 : IN  STD_LOGIC; -- clock.
+		q 			 : OUT STD_LOGIC_VECTOR(9 DOWNTO 0));	-- output.
+	END COMPONENT;
 BEGIN
   --instantiate the lcd controller for first line
   dut: lcd_controller
     PORT MAP(clk => clk, reset_n => '1', lcd_enable => lcd_enable, lcd_bus => lcd_bus, 
              busy => lcd_busy, rw => rw, rs => rs, e => e, lcd_data => lcd_data);
-  
+  PROCESS(clk2, clr, ld)
+	 begin
+		if clr = '1' then
+			q <= "1000100000";
+		elsif rising_edge(clk) then
+			if ld = '1' then
+				q <= d;
+			end if;
+		end if;
+  end process;
   PROCESS(clk)
     VARIABLE char   :  INTEGER RANGE 0 TO 57:= 0;
 	 VARIABLE extra : STD_LOGIC_VECTOR(9 downto 0);
@@ -120,7 +146,7 @@ BEGIN
 		  letter14a := "1000100000";
 		  letter15a := "1000100000";
 		  letter16a := "1000100000";
-		  
+		  if choice = '1' then
 		  --this catches errors when key shifts a letter past z
 		  if letter1a + key > "1001011010" then
 				extra := letter1a + key - "1001011010";
@@ -298,7 +324,186 @@ BEGIN
 		  if letter16a = "1000100000" then
 				letter16b := "1000100000";
 		  end if;
-			
+		
+		--Decrypter("CHOICE" = 0)
+		else
+			if letter1a - key < "1001000001" then
+				extra := letter1a - key + "1001000001";
+				letter1b := "1001011011" - extra;
+		  else 
+				letter1b := letter1a - key;
+		  end if;
+		  
+		   if letter2a - key > "1001000001" then
+				extra := letter2a - key + "1001000001";
+				letter2b := "1001011011" - extra;
+		  else 
+				letter2b := letter2a - key;
+		  end if;
+		  
+		   if letter3a - key > "1001000001" then
+				extra := letter3a - key + "1001000001";
+				letter3b := "1001011011" - extra;
+		  else 
+				letter3b := letter3a - key;
+		  end if;
+		  
+		   if letter4a - key > "1001000001" then
+				extra := letter4a - key + "1001000001";
+				letter4b := "1001011011" - extra;
+		  else 
+				letter4b := letter4a - key;
+		  end if;
+		  
+		   if letter5a - key > "1001000001" then
+				extra := letter5a - key + "1001000001";
+				letter5b := "1001011011" - extra;
+		  else 
+				letter5b := letter5a - key;
+		  end if;
+		  
+		   if letter6a - key > "1001000001" then
+				extra := letter6a - key + "1001000001";
+				letter6b := "1001011011" - extra;
+		  else 
+				letter6b := letter6a - key;
+		  end if;
+		  
+		   if letter7a - key > "1001000001" then
+				extra := letter7a - key + "1001000001";
+				letter7b := "1001011011" - extra;
+		  else 
+				letter7b := letter7a - key;
+		  end if;
+		  
+		   if letter8a - key > "1001000001" then
+				extra := letter8a - key + "1001000001";
+				letter8b := "1001011011" - extra;
+		  else 
+				letter8b := letter8a - key;
+		  end if;
+		  
+		   if letter9a - key > "1001000001" then
+				extra := letter9a - key + "1001000001";
+				letter9b := "1001011011" - extra;
+		  else 
+				letter9b := letter9a - key;
+		  end if;
+		  
+		   if letter10a - key > "1001000001" then
+				extra := letter10a - key + "1001000001";
+				letter10b := "1001011011" - extra;
+		  else 
+				letter10b := letter10a - key;
+		  end if;
+		  
+		   if letter11a - key > "1001000001" then
+				extra := letter11a - key + "1001000001";
+				letter11b := "1001011011" - extra;
+		  else 
+				letter11b := letter11a - key;
+		  end if;
+		  
+		   if letter12a - key > "1001000001" then
+				extra := letter12a - key + "1001000001";
+				letter12b := "1001011011" - extra;
+		  else 
+				letter12b := letter12a - key;
+		  end if;
+		  
+		   if letter13a - key > "1001000001" then
+				extra := letter13a - key + "1001000001";
+				letter13b := "1001011011" - extra;
+		  else 
+				letter13b := letter13a - key;
+		  end if;
+		  
+		   if letter14a - key > "1001000001" then
+				extra := letter14a - key + "1001000001";
+				letter14b := "1001011011" - extra;
+		  else 
+				letter14b := letter14a - key;
+		  end if;
+		  
+		   if letter15a - key > "1001000001" then
+				extra := letter15a - key + "1001000001";
+				letter15b := "1001011011" - extra;
+		  else 
+				letter15b := letter15a - key;
+		  end if;
+		  
+		   if letter16a - key > "1001000001" then
+				extra := letter16a - key + "1001000001";
+				letter16b := "1001011011" - extra;
+		  else 
+				letter16b := letter16a - key;
+		  end if;
+		  
+		  --this keeps spaces as spaces
+		  if letter1a = "1000100000" then
+				letter1b := "1000100000";
+		  end if;
+		  
+		  if letter2a = "1000100000" then
+				letter2b := "1000100000";
+		  end if;
+		  
+		  if letter3a = "1000100000" then
+				letter3b := "1000100000";
+		  end if;
+		  
+		  if letter4a = "1000100000" then
+				letter4b := "1000100000";
+		  end if;
+		  
+		  if letter5a = "1000100000" then
+				letter5b := "1000100000";
+		  end if;
+		  
+		  if letter6a = "1000100000" then
+				letter6b := "1000100000";
+		  end if;
+		  
+		  if letter7a = "1000100000" then
+				letter7b := "1000100000";
+		  end if;
+		  
+		  if letter8a = "1000100000" then
+				letter8b := "1000100000";
+		  end if;
+		  
+		  if letter9a = "1000100000" then
+				letter9b := "1000100000";
+		  end if;
+		  
+		  if letter10a = "1000100000" then
+				letter10b := "1000100000";
+		  end if;
+		  
+		  if letter11a = "1000100000" then
+				letter11b := "1000100000";
+		  end if;
+		  
+		  if letter12a = "1000100000" then
+				letter12b := "1000100000";
+		  end if;
+		  
+		  if letter13a = "1000100000" then
+				letter13b := "1000100000";
+		  end if;
+		  
+		  if letter14a = "1000100000" then
+				letter14b := "1000100000";
+		  end if;
+		  
+		  if letter15a = "1000100000" then
+				letter15b := "1000100000";
+		  end if;
+		  
+		  if letter16a = "1000100000" then
+				letter16b := "1000100000";
+		  end if;
+		end if;
         CASE char IS
           WHEN 1 => lcd_bus <= letter1a; --H
           WHEN 2 => lcd_bus <= letter2a; --E
@@ -372,4 +577,3 @@ BEGIN
   END PROCESS;
   
 END behavior;
-
