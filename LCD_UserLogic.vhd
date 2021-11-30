@@ -22,7 +22,7 @@
 --   module using the lcd_controller.vhd component.
 --
 --------------------------------------------------------------------------------
-
+-- [1]
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
@@ -34,15 +34,17 @@ ENTITY lcd IS
       clk       : IN  STD_LOGIC;  --system clock
       rw, rs, e : OUT STD_LOGIC;  --read/write, setup/data, and enable for lcd
       lcd_data  : OUT STD_LOGIC_VECTOR(7 DOWNTO 0); --data signals for lcd
+	  -- [1]
 	   key    : IN  STD_LOGIC_VECTOR(4 DOWNTO 0);
 		decrypt : IN STD_LOGIC);
+	-- [1]
 END lcd;
 
 ARCHITECTURE behavior OF lcd IS
   SIGNAL   lcd_enable : STD_LOGIC;
   SIGNAL   lcd_bus    : STD_LOGIC_VECTOR(9 DOWNTO 0);
   SIGNAL   lcd_busy   : STD_LOGIC;
-
+--[3], [4]
   COMPONENT lcd_controller IS
     PORT(
        clk        : IN  STD_LOGIC; --system clock
@@ -53,12 +55,13 @@ ARCHITECTURE behavior OF lcd IS
        rw, rs, e  : OUT STD_LOGIC; --read/write, setup/data, and enable for lcd
        lcd_data   : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)); --data signals for lcd
   END COMPONENT;
+	  --[1]
 BEGIN
   --instantiate the lcd controller for first line
   dut: lcd_controller
     PORT MAP(clk => clk, reset_n => '1', lcd_enable => lcd_enable, lcd_bus => lcd_bus, 
              busy => lcd_busy, rw => rw, rs => rs, e => e, lcd_data => lcd_data);
-  
+  -- [Alecea Grosjean, Anders Burck]
   PROCESS(clk)
     VARIABLE char   :  INTEGER RANGE 0 TO 57:= 0;
 	 VARIABLE extra : STD_LOGIC_VECTOR(9 downto 0);
@@ -114,7 +117,7 @@ BEGIN
 	 VARIABLE letter14c :STD_LOGIC_VECTOR(9 downto 0);
 	 VARIABLE letter15c :STD_LOGIC_VECTOR(9 downto 0);
 	 VARIABLE letter16c :STD_LOGIC_VECTOR(9 downto 0);
-	 
+	-- [1] 
   BEGIN
     IF(clk'EVENT AND clk = '1') THEN
       IF(lcd_busy = '0' AND lcd_enable = '0') THEN
@@ -122,7 +125,7 @@ BEGIN
         IF(char < 57) THEN
           char := char + 1;
         END IF;
-		  
+		  --[AG AB]
 		  
 		  letter1a := "1001001000"; --H
 		  letter2a := "1001000101"; --E
@@ -486,6 +489,7 @@ BEGIN
 		  
 		  
 		  IF(decrypt = '0') THEN 
+			  -- [3]
 			  CASE char IS
 				 WHEN 1 => lcd_bus <= letter1a; --H
 				 WHEN 2 => lcd_bus <= letter2a; --E
@@ -503,7 +507,7 @@ BEGIN
 				 WHEN 14 => lcd_bus <= letter14a; -- space
 				 WHEN 15 => lcd_bus <= letter15a; -- space
 				 WHEN 16 => lcd_bus <= letter16a; -- space
-		 
+		 --[AG AB]
 				--move to next line/set the DDRam address to 0x40
 				 When 17 => lcd_bus <= "1000100000";
 				 When 18 => lcd_bus <= "1000100000";
@@ -614,7 +618,7 @@ BEGIN
 				 WHEN OTHERS => lcd_enable <= '0';
 				 END CASE;
 		END If;
-	
+	--[1]
 		
       ELSE
         lcd_enable <= '0';
