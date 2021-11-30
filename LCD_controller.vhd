@@ -44,7 +44,7 @@
 --      decrement mode, entire shift on     Line 130   lcd_data <= "00000101";
 --    
 --------------------------------------------------------------------------------
-
+--[1]
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.std_logic_arith.all;
@@ -179,7 +179,7 @@ BEGIN
           state <= ready;
         END IF;
 
-      END CASE;    
+      END CASE;  
     
       --reset
       IF(reset_n = '0') THEN
@@ -189,3 +189,4 @@ BEGIN
     END IF;
   END PROCESS;
 END controller;
+--[1]
